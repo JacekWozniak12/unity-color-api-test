@@ -1,16 +1,28 @@
 using UnityEngine;
 
-public class FolderUI : MonoBehaviour
+public class FolderItem : MonoBehaviour
 {
-    // Start is called before the first frame update
+    ColorItem[] colorItems;
+
     void Start()
     {
-        
+        SetColorItems();
+        ApiConnector.Instance.ColorReady.AddListener(UpdateColors);
     }
 
-    // Update is called once per frame
-    void Update()
+    void SetColorItems()
     {
-        
+        colorItems = gameObject.GetComponentsInChildren<ColorItem>();
+
+        for (int i = 0; i < colorItems.Length; i++)
+            colorItems[i].Index = i;
+    }
+
+    void UpdateColors(Color[] colorArray)
+    {
+        for (int i = 0; i < colorItems.Length; i++)
+        {
+            colorItems[i].SetColor(colorArray);
+        }
     }
 }

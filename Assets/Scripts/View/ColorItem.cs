@@ -1,16 +1,28 @@
 using UnityEngine;
+using UnityEngine.UI;
 
-public class ColorUI : MonoBehaviour
+public class ColorItem : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public int Index;
+    public Color Color;
+
+    Image image;
+    
     void Start()
     {
-        
+        image = GetComponent<Image>();
     }
 
-    // Update is called once per frame
-    void Update()
+    /// <summary>
+    /// Takes color from given Color[] array using preset index in component
+    /// </summary>
+    public void SetColor(Color[] colors)
     {
-        
+        Color = ColorRangeConverter.ColorFromRGB255(
+            colors[Index].r, 
+            colors[Index].g, 
+            colors[Index].b
+            );
+        image.color = Color;
     }
 }

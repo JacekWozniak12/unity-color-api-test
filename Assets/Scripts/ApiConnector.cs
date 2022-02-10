@@ -5,15 +5,32 @@ using UnityEngine.Networking;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using UnityEngine.Events;
 
 public class ApiConnector : MonoBehaviour
 {
     const string API_ADDRESS = "http://colormind.io/api/";
 
+    public List<Color> CurrentColors = new List<Color>(5);
+    public static ApiConnector Instance;
+
+    void Awake()
+    {
+        Instance = this;
+    }
+
+    /// <summary>
+    /// Starts routine that finishes with ColorReady event;
+    /// </summary>
     public void GetColors()
     {
         StartCoroutine(RequestColorScheme());
     }
+
+    /// <summary>
+    /// Tries to connect with server specified in API_ADDRESS
+    /// </summary>
+    public UnityEvent<Color[]> ColorReady = new UnityEvent<Color[]>();
 
     IEnumerator RequestColorScheme()
     {
@@ -44,6 +61,7 @@ public class ApiConnector : MonoBehaviour
 
             JObject t = JsonConvert.DeserializeObject<JObject>(colorSchemeInfoRequest.downloadHandler.text);
             List<int>[] colors = t.GetValue("result").ToObject<List<int>[]>();
+            List<Color> temp = new List<Color>();
 
             foreach (List<int> l in colors)
             {
@@ -51,13 +69,18 @@ public class ApiConnector : MonoBehaviour
 
                 string message = string.Format(
                     "<color=#{0:X2}{1:X2}{2:X2}>{3}</color>",
-                    (byte)(c.r * 255f),
-                    (byte)(c.g * 255f),
-                    (byte)(c.b * 255f),
+                    (byte)(c.r),
+                    (byte)(c.g),
+                    (byte)(c.b),
                     c);
 
                 Debug.Log(message);
+
+                temp.Add(c);
             }
+
+            CurrentColors = temp;
+            ColorReady?.Invoke(temp.ToArray());
         }
     }
 }
