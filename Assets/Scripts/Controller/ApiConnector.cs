@@ -35,10 +35,7 @@ public class ApiConnector : MonoBehaviour
     IEnumerator RequestColorScheme()
     {
         string request = API_ADDRESS;
-        Debug.Log(request);
-
         string data = "{\"model\" : \"default\"}";
-
         var dataBytes = Encoding.UTF8.GetBytes(data);
 
         using (UnityWebRequest colorSchemeInfoRequest = new UnityWebRequest(request, "GET"))
