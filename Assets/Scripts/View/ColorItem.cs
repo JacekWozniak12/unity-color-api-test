@@ -7,10 +7,13 @@ public class ColorItem : MonoBehaviour
     public Color Color;
 
     Image image;
-    
+    Button button;
+
     void Start()
     {
         image = GetComponent<Image>();
+        button = gameObject.AddComponent<Button>();
+        button.onClick.AddListener(RequestColorChanger);
     }
 
     /// <summary>
@@ -18,11 +21,16 @@ public class ColorItem : MonoBehaviour
     /// </summary>
     public void SetColor(Color[] colors)
     {
-        Color = ColorRangeConverter.ColorFromRGB255(
-            colors[Index].r, 
-            colors[Index].g, 
+        Color = ColorRangeConverter.ColorFromRGB255_Color(
+            colors[Index].r,
+            colors[Index].g,
             colors[Index].b
             );
         image.color = Color;
     }
+
+    /// <summary>
+    /// Enables ColorItem to use the colorChanger
+    /// </summary>
+    public void RequestColorChanger() => Popup.Instance.RequestColorChanger(this);
 }
