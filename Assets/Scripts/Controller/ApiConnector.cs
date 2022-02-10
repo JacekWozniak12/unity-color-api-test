@@ -25,8 +25,7 @@ public class ApiConnector : MonoBehaviour
     /// </summary>
     public void GetColors()
     {
-        // StartCoroutine(SendRequestColorScheme());
-        RequestColorScheme(Color.red, 1);
+        RequestColorScheme();
     }
 
     /// <summary>
@@ -34,10 +33,15 @@ public class ApiConnector : MonoBehaviour
     /// </summary>
     public UnityEvent<Color[]> ColorReady = new UnityEvent<Color[]>();
 
+    public void RequestColorScheme()
+    {
+        StartCoroutine(SendRequestColorScheme());
+    }
+
     public void RequestColorScheme(Color color, int index)
     {
         string part = "{\"input\":[";
-        byte[] byteColor = ColorRangeConverter.ColorToRGB255(color.r, color.g, color.b);
+        byte[] byteColor = ColorRangeConverter.ColorToRGB255_Byte(color.r, color.g, color.b);
 
         for (int i = 0; i < 5; i++)
         {
