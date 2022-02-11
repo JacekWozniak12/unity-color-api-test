@@ -306,7 +306,7 @@ GameObject:
   - component: {fileID: 95652561}
   - component: {fileID: 95652560}
   m_Layer: 5
-  m_Name: Cancel
+  m_Name: Close
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1707,7 +1707,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 320881243}
   generate: {fileID: 1435517217}
-  cancel: {fileID: 95652560}
+  close: {fileID: 0}
   red: {fileID: 1344411857}
   green: {fileID: 459645927}
   blue: {fileID: 642510140}
@@ -3334,7 +3334,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Cancel
+  m_text: Close
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

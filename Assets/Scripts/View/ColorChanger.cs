@@ -13,7 +13,7 @@ public class ColorChanger : MonoBehaviour
     Button generate;
 
     [SerializeField]
-    Button cancel;
+    Button close;
 
     ColorItem requestingItem;
 
@@ -30,7 +30,7 @@ public class ColorChanger : MonoBehaviour
     void Start()
     {
         generate.onClick.AddListener(Generate);
-        cancel.onClick.AddListener(Cancel);
+        close.onClick.AddListener(Close);
     }
 
     void Update()
@@ -75,8 +75,9 @@ public class ColorChanger : MonoBehaviour
         ApiConnector.Instance.RequestColorScheme(requestingItem.Color, requestingItem.Index);
     }
 
-    void Cancel()
+    void Close()
     {
+        UpdateColor("");
         Clean();
         Popup.Instance.RequestHide(this.gameObject);
     }
