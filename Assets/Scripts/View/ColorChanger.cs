@@ -10,22 +10,13 @@ public class ColorChanger : MonoBehaviour
     Image image;
 
     [SerializeField]
-    Button copyToClipboard;
-
-    [SerializeField]
-    Button close;
-
-    ColorItem requestingItem;
+    Button copyToClipboard, close;
 
     [Header("Inputs")]
     [SerializeField]
-    TMP_InputField red;
+    TMP_InputField red, green, blue;
 
-    [SerializeField]
-    TMP_InputField green;
-
-    [SerializeField]
-    TMP_InputField blue;
+    ColorItem requestingItem;
 
     void Start()
     {
@@ -35,9 +26,10 @@ public class ColorChanger : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.C) && Input.GetKey(KeyCode.LeftControl))
-            if(requestingItem != null) CopyIntoClipboard();
+        if (CtrlAndC_Check()) if (requestingItem != null) CopyIntoClipboard();
     }
+
+    private static bool CtrlAndC_Check() => Input.GetKeyDown(KeyCode.C) && Input.GetKey(KeyCode.LeftControl);
 
     public void Connect(ColorItem colorItem)
     {
@@ -55,6 +47,7 @@ public class ColorChanger : MonoBehaviour
         image.color = ColorRangeConverter.ColorFromRGB255_Color(red.text, green.text, blue.text);
     }
 
+    void CopyIntoClipboard() => GUIUtility.systemCopyBuffer = ColorRangeConverter.ColorToRGB255_String(requestingItem.Color);
     void UpdateColor(string txt)
     {
         try
@@ -62,7 +55,7 @@ public class ColorChanger : MonoBehaviour
             if (float.TryParse(red.text, out float r)) r = Mathf.Clamp(r, 0, 255);
             if (float.TryParse(green.text, out float g)) g = Mathf.Clamp(g, 0, 255);
             if (float.TryParse(blue.text, out float b)) b = Mathf.Clamp(b, 0, 255);
-            
+
             red.text = r.ToString();
             green.text = g.ToString();
             blue.text = b.ToString();
@@ -75,11 +68,6 @@ public class ColorChanger : MonoBehaviour
         catch (Exception e) { }
     }
 
-    // void Generate()
-    // {
-    //     ApiConnector.Instance.RequestColorScheme(requestingItem.Color, requestingItem.Index);
-    // }
-
     void Close()
     {
         UpdateColor("");
@@ -87,13 +75,5 @@ public class ColorChanger : MonoBehaviour
         Popup.Instance.RequestHide(this.gameObject);
     }
 
-    void Clean()
-    {
-        requestingItem = null;
-    }
-    
-    void CopyIntoClipboard()
-    {
-        GUIUtility.systemCopyBuffer = ColorRangeConverter.ColorToRGB255_String(requestingItem.Color);
-    }
+    void Clean() => requestingItem = null;
 }

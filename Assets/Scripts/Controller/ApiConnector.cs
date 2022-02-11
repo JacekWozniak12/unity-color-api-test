@@ -90,6 +90,7 @@ public class ApiConnector : MonoBehaviour
             else
             {
                 // Debug.Log(colorSchemeInfoRequest.downloadHandler.text);
+                
                 try
                 {
                     JObject t = JsonConvert.DeserializeObject<JObject>(colorSchemeInfoRequest.downloadHandler.text);
