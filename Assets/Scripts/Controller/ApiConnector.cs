@@ -66,7 +66,7 @@ public class ApiConnector : MonoBehaviour
         StartCoroutine(SendRequestColorScheme(part));
     }
 
-    IEnumerator SendRequestColorScheme(string data = "{\"model\" : \"default\"}")
+    IEnumerator SendRequestColorScheme(string data = "{\"model\" : \"default\"")
     {
         string request = API_ADDRESS;
         var dataBytes = Encoding.UTF8.GetBytes(data);
@@ -85,32 +85,42 @@ public class ApiConnector : MonoBehaviour
                 colorSchemeInfoRequest.result == UnityWebRequest.Result.ProtocolError)
             {
                 Debug.LogError(colorSchemeInfoRequest.error);
+                Popup.Instance.RequestErrorMessage(colorSchemeInfoRequest.error);
             }
             else
-                Debug.Log(colorSchemeInfoRequest.downloadHandler.text);
-
-            JObject t = JsonConvert.DeserializeObject<JObject>(colorSchemeInfoRequest.downloadHandler.text);
-            List<int>[] colors = t.GetValue("result").ToObject<List<int>[]>();
-            List<Color> temp = new List<Color>();
-
-            foreach (List<int> l in colors)
             {
-                Color c = new Color(l[0], l[1], l[2]);
+                // Debug.Log(colorSchemeInfoRequest.downloadHandler.text);
+                try
+                {
+                    JObject t = JsonConvert.DeserializeObject<JObject>(colorSchemeInfoRequest.downloadHandler.text);
+                    List<int>[] colors = t.GetValue("result").ToObject<List<int>[]>();
+                    List<Color> temp = new List<Color>();
 
-                string message = string.Format(
-                    "<color=#{0:X2}{1:X2}{2:X2}>{3}</color>",
-                    (byte)(c.r),
-                    (byte)(c.g),
-                    (byte)(c.b),
-                    c);
+                    foreach (List<int> l in colors)
+                    {
+                        Color c = new Color(l[0], l[1], l[2]);
 
-                Debug.Log(message);
+                        string message = string.Format(
+                            "<color=#{0:X2}{1:X2}{2:X2}>{3}</color>",
+                            (byte)(c.r),
+                            (byte)(c.g),
+                            (byte)(c.b),
+                            c);
 
-                temp.Add(c);
+                        // Debug.Log(message);
+
+                        temp.Add(c);
+                    }
+
+                    CurrentColors = temp;
+                    ColorReady?.Invoke(temp.ToArray());
+                }
+                catch (JsonException e)
+                {
+                    Popup.Instance.RequestErrorMessage(e.Message);
+                }
             }
 
-            CurrentColors = temp;
-            ColorReady?.Invoke(temp.ToArray());
         }
     }
 }

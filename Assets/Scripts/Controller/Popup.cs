@@ -6,6 +6,9 @@ public class Popup : MonoBehaviour
     ColorChanger colorChanger;
 
     [SerializeField]
+    ErrorMessage errorMessage;
+
+    [SerializeField]
     GameObject view;
 
     public static Popup Instance;
@@ -20,6 +23,13 @@ public class Popup : MonoBehaviour
         view.SetActive(true);
         colorChanger.gameObject.SetActive(true);
         colorChanger.Connect(item);
+    }
+
+    public void RequestErrorMessage(string information)
+    {
+        view.SetActive(true);
+        errorMessage.gameObject.SetActive(true);
+        errorMessage.DisplayMessage(information);
     }
 
     /// <summary>
