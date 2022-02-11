@@ -26,18 +26,21 @@ public class ColorItem : MonoBehaviour
 
     Image image;
     Button button;
+    Toggle toggle;
 
     void Start()
     {
         image = GetComponent<Image>();
         button = gameObject.AddComponent<Button>();
         button.onClick.AddListener(RequestColorChanger);
+        toggle = transform.parent.GetComponentInChildren<Toggle>();
+        toggle.onValueChanged.AddListener(SetDirty);
     }
 
     /// <summary>
     /// Takes color from given Color[] array using preset index in component
     /// </summary>
-    public void SetColor(Color[] colors, bool setDirty = false)
+    public void SetColor(Color[] colors)
     {
         Color = ColorRangeConverter.ColorFromRGB255_Color(
             colors[Index].r,
@@ -45,7 +48,6 @@ public class ColorItem : MonoBehaviour
             colors[Index].b
             );
         image.color = Color;
-        Dirty = setDirty;
     }
 
     /// <summary>
@@ -62,7 +64,6 @@ public class ColorItem : MonoBehaviour
         Dirty = setDirty;
     }
 
-    public void SetDirty() => SetDirty(!Dirty);
     public void SetDirty(bool setDirty) => Dirty = setDirty;
 
     /// <summary>

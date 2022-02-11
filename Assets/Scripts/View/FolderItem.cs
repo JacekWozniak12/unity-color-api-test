@@ -18,6 +18,8 @@ public class FolderItem : MonoBehaviour
         foreach (ColorItem colorItem in colorItems)
             if (colorItem.Dirty) dictionary.Add(colorItem.Index, colorItem.Color);
 
+        Debug.Log(dictionary);
+
         if (dictionary.Count > 0)
             ApiConnector.Instance.RequestColorScheme(dictionary);
         else
