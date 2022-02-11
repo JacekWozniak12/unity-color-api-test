@@ -33,10 +33,16 @@ public class ColorChanger : MonoBehaviour
         cancel.onClick.AddListener(Cancel);
     }
 
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.C) && Input.GetKey(KeyCode.LeftControl))
+            if(requestingItem != null) CopyIntoClipboard();
+    }
+
     public void Connect(ColorItem colorItem)
     {
         requestingItem = colorItem;
-        string[] colorParts = ColorRangeConverter.ColorToRGB255_String(colorItem.Color);
+        string[] colorParts = ColorRangeConverter.ColorToRGB255_StringArray(colorItem.Color);
 
         red.text = colorParts[0];
         green.text = colorParts[1];
@@ -56,9 +62,10 @@ public class ColorChanger : MonoBehaviour
             if (float.TryParse(red.text, out float r)) r = Mathf.Clamp(r, 0, 255);
             if (float.TryParse(green.text, out float g)) g = Mathf.Clamp(g, 0, 255);
             if (float.TryParse(blue.text, out float b)) b = Mathf.Clamp(b, 0, 255);
+            Color color = ColorRangeConverter.ColorFromRGB255_Color(r, g, b);
 
-            image.color = ColorRangeConverter.ColorFromRGB255_Color(r, g, b);
-            requestingItem.SetColor(image.color);
+            image.color = color;
+            requestingItem.SetColor(color);
         }
         catch (Exception e) { }
     }
@@ -77,5 +84,10 @@ public class ColorChanger : MonoBehaviour
     void Clean()
     {
         requestingItem = null;
+    }
+    
+    void CopyIntoClipboard()
+    {
+        GUIUtility.systemCopyBuffer = ColorRangeConverter.ColorToRGB255_String(requestingItem.Color);
     }
 }

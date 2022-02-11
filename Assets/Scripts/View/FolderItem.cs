@@ -37,6 +37,6 @@ public class FolderItem : MonoBehaviour
     void UpdateColors(Color[] colorArray)
     {
         for (int i = 0; i < colorItems.Length; i++)
-            colorItems[i].SetColor(colorArray);
+            colorItems[i].SetColorFromRGB255Array(colorArray);
     }
 }

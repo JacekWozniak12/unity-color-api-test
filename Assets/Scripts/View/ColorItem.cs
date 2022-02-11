@@ -31,6 +31,8 @@ public class ColorItem : MonoBehaviour
     void Start()
     {
         image = GetComponent<Image>();
+        Color = Color.black;
+        image.color = Color;
         button = gameObject.AddComponent<Button>();
         button.onClick.AddListener(RequestColorChanger);
         toggle = transform.parent.GetComponentInChildren<Toggle>();
@@ -40,7 +42,7 @@ public class ColorItem : MonoBehaviour
     /// <summary>
     /// Takes color from given Color[] array using preset index in component
     /// </summary>
-    public void SetColor(Color[] colors)
+    public void SetColorFromRGB255Array(Color[] colors)
     {
         Color = ColorRangeConverter.ColorFromRGB255_Color(
             colors[Index].r,
@@ -55,11 +57,6 @@ public class ColorItem : MonoBehaviour
     /// </summary>
     public void SetColor(Color color, bool setDirty = false)
     {
-        Color = ColorRangeConverter.ColorFromRGB255_Color(
-            color.r,
-            color.g,
-            color.b
-            );
         image.color = Color;
         Dirty = setDirty;
     }
