@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System;
 
 public class ColorChanger : MonoBehaviour
 {
@@ -36,21 +37,30 @@ public class ColorChanger : MonoBehaviour
     {
         requestingItem = colorItem;
         string[] colorParts = ColorRangeConverter.ColorToRGB255_String(colorItem.Color);
-        
+
         red.text = colorParts[0];
         green.text = colorParts[1];
         blue.text = colorParts[2];
-        
+
         red.onEndEdit.AddListener(UpdateColor);
         green.onEndEdit.AddListener(UpdateColor);
         blue.onEndEdit.AddListener(UpdateColor);
-        UpdateColor("");
+
+        image.color = ColorRangeConverter.ColorFromRGB255_Color(red.text, green.text, blue.text);
     }
 
     void UpdateColor(string txt)
     {
-        image.color = ColorRangeConverter.ColorFromRGB255_Color(red.text, green.text, blue.text);
-        requestingItem.SetColor(image.color, true);
+        try
+        {
+            if (float.TryParse(red.text, out float r)) r = Mathf.Clamp(r, 0, 255);
+            if (float.TryParse(green.text, out float g)) g = Mathf.Clamp(g, 0, 255);
+            if (float.TryParse(blue.text, out float b)) b = Mathf.Clamp(b, 0, 255);
+
+            image.color = ColorRangeConverter.ColorFromRGB255_Color(r, g, b);
+            requestingItem.SetColor(image.color);
+        }
+        catch (Exception e) { }
     }
 
     void Generate()
