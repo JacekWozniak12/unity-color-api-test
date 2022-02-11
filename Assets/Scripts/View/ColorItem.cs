@@ -55,12 +55,7 @@ public class ColorItem : MonoBehaviour
     /// <summary>
     /// Takes color
     /// </summary>
-    public void SetColor(Color color, bool setDirty = false)
-    {
-        image.color = Color;
-        Dirty = setDirty;
-    }
-
+    public void SetColor(Color color) => image.color = Color;
     public void SetDirty(bool setDirty) => Dirty = setDirty;
 
     /// <summary>
