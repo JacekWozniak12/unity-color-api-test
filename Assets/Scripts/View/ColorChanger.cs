@@ -35,21 +35,27 @@ public class ColorChanger : MonoBehaviour
     public void Connect(ColorItem colorItem)
     {
         requestingItem = colorItem;
-        string[] colorParts = ColorRangeConverter.ColorToRGB255_String(Color);
+        string[] colorParts = ColorRangeConverter.ColorToRGB255_String(colorItem.Color);
         
         red.text = colorParts[0];
         green.text = colorParts[1];
         blue.text = colorParts[2];
+        
+        red.onEndEdit.AddListener(UpdateColor);
+        green.onEndEdit.AddListener(UpdateColor);
+        blue.onEndEdit.AddListener(UpdateColor);
+        UpdateColor("");
     }
 
-    void ChangeImageColor()
+    void UpdateColor(string txt)
     {
-
+        image.color = ColorRangeConverter.ColorFromRGB255_Color(red.text, green.text, blue.text);
+        requestingItem.Color = image.color;
     }
 
     void Generate()
     {
-
+        ApiConnector.Instance.RequestColorScheme(requestingItem.Color, requestingItem.Index);
     }
 
     void Cancel()

@@ -17,6 +17,8 @@ public class Popup : MonoBehaviour
 
     public void RequestColorChanger(ColorItem item)
     {
+        view.SetActive(true);
+        colorChanger.gameObject.SetActive(true);
         colorChanger.Connect(item);
     }
 
@@ -28,6 +30,6 @@ public class Popup : MonoBehaviour
         if (requestGiver.transform.parent == this.transform)
             requestGiver.SetActive(false);
 
-        this.gameObject.SetActive(false);
+        view.SetActive(false);
     }
 }

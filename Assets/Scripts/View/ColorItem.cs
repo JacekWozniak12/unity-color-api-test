@@ -4,7 +4,20 @@ using UnityEngine.UI;
 public class ColorItem : MonoBehaviour
 {
     public int Index;
-    public Color Color;
+    public Color Color
+    {
+        get => _color;
+        set
+        {
+            if (_color != value)
+            {
+                _color = value;
+                image.color = value;
+            }
+        }
+    }
+
+    private Color _color;
 
     Image image;
     Button button;

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -14,6 +15,26 @@ public static class ColorRangeConverter
         float blue = b / 255;
 
         return new Color(red, green, blue);
+    }
+
+    /// <summary>
+    /// Returns color from string, if string invalid, returns black
+    /// </summary>
+    public static Color ColorFromRGB255_Color(string r, string g, string b)
+    {
+        try
+        {
+            float red = float.Parse(r) / 255;
+            float green = float.Parse(g) / 255;
+            float blue = float.Parse(b) / 255;
+
+            return new Color(red, green, blue);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e +"\n Returning black");
+            return Color.black;
+        }
     }
 
     public static byte[] ColorToRGB255_Byte(float r, float g, float b)
