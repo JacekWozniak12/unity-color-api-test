@@ -21,14 +21,6 @@ public class ApiConnector : MonoBehaviour
     }
 
     /// <summary>
-    /// Starts routine that finishes with ColorReady event;
-    /// </summary>
-    public void GetColors()
-    {
-        RequestColorScheme();
-    }
-
-    /// <summary>
     /// Tries to connect with server specified in API_ADDRESS
     /// </summary>
     public UnityEvent<Color[]> ColorReady = new UnityEvent<Color[]>();
@@ -36,6 +28,26 @@ public class ApiConnector : MonoBehaviour
     public void RequestColorScheme()
     {
         StartCoroutine(SendRequestColorScheme());
+    }
+
+    public void RequestColorScheme(Dictionary<int, Color> dictionary)
+    {
+        string part = "{\"input\":[";
+
+        for (int i = 0; i < 5; i++)
+        {
+            if (dictionary.TryGetValue(i, out Color color))
+            {
+                byte[] byteColor = ColorRangeConverter.ColorToRGB255_Byte(color.r, color.g, color.b);
+                part += $"[{byteColor[0]}, {byteColor[1]}, {byteColor[2]}]";
+            }
+            else part += "\"N\"";
+            if (i < 4) part += ",";
+        }
+
+        part += "],\"model\":\"default\"}";
+        Debug.Log(part);
+        StartCoroutine(SendRequestColorScheme(part));
     }
 
     public void RequestColorScheme(Color color, int index)

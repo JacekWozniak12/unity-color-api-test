@@ -19,10 +19,13 @@ public class ColorItem : MonoBehaviour
 
     private Color _color;
 
+    public bool Dirty
+    {
+        get; private set;
+    }
+
     Image image;
     Button button;
-
-    bool dirty;
 
     void Start()
     {
@@ -42,7 +45,7 @@ public class ColorItem : MonoBehaviour
             colors[Index].b
             );
         image.color = Color;
-        dirty = setDirty;
+        Dirty = setDirty;
     }
 
     /// <summary>
@@ -56,13 +59,11 @@ public class ColorItem : MonoBehaviour
             color.b
             );
         image.color = Color;
-        dirty = setDirty;
+        Dirty = setDirty;
     }
 
-    public void SetDirty(bool setDirty)
-    {
-        dirty = setDirty;
-    }
+    public void SetDirty() => SetDirty(!Dirty);
+    public void SetDirty(bool setDirty) => Dirty = setDirty;
 
     /// <summary>
     /// Enables ColorItem to use the colorChanger
