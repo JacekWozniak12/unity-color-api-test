@@ -66,7 +66,7 @@ public class ApiConnector : MonoBehaviour
         StartCoroutine(SendRequestColorScheme(part));
     }
 
-    IEnumerator SendRequestColorScheme(string data = "{\"model\" : \"default\"")
+    IEnumerator SendRequestColorScheme(string data = "{\"model\" : \"default\"}")
     {
         string request = API_ADDRESS;
         var dataBytes = Encoding.UTF8.GetBytes(data);

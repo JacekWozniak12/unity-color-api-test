@@ -33,13 +33,11 @@ public class Popup : MonoBehaviour
     }
 
     /// <summary>
-    /// Hides popup and request giver, if request giver is a child of the popup system
+    /// Hides popup and request giver, if hideRequestGiver is not specified or true
     /// </summary>
-    public void RequestHide(GameObject requestGiver)
+    public void RequestHide(GameObject requestGiver, bool hideRequestGiver = true)
     {
-        if (requestGiver.transform.parent == this.transform)
-            requestGiver.SetActive(false);
-
+        if (hideRequestGiver) requestGiver.SetActive(false);
         view.SetActive(false);
     }
 }
