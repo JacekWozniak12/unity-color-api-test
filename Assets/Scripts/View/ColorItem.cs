@@ -9,11 +9,8 @@ public class ColorItem : MonoBehaviour
         get => _color;
         private set
         {
-            if (_color != value)
-            {
-                _color = value;
-                image.color = value;
-            }
+            _color = value;
+            image.color = value;
         }
     }
 
@@ -49,13 +46,14 @@ public class ColorItem : MonoBehaviour
             colors[Index].g,
             colors[Index].b
             );
+
         image.color = Color;
     }
 
     /// <summary>
     /// Takes color
     /// </summary>
-    public void SetColor(Color color) => image.color = Color;
+    public void SetColor(Color color) => Color = color;
     public void SetDirty(bool setDirty) => Dirty = setDirty;
 
     /// <summary>

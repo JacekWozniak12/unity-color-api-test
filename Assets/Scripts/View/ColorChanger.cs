@@ -10,7 +10,7 @@ public class ColorChanger : MonoBehaviour
     Image image;
 
     [SerializeField]
-    Button generate;
+    Button copyToClipboard;
 
     [SerializeField]
     Button close;
@@ -29,7 +29,7 @@ public class ColorChanger : MonoBehaviour
 
     void Start()
     {
-        generate.onClick.AddListener(Generate);
+        copyToClipboard.onClick.AddListener(CopyIntoClipboard);
         close.onClick.AddListener(Close);
     }
 
@@ -62,6 +62,11 @@ public class ColorChanger : MonoBehaviour
             if (float.TryParse(red.text, out float r)) r = Mathf.Clamp(r, 0, 255);
             if (float.TryParse(green.text, out float g)) g = Mathf.Clamp(g, 0, 255);
             if (float.TryParse(blue.text, out float b)) b = Mathf.Clamp(b, 0, 255);
+            
+            red.text = r.ToString();
+            green.text = g.ToString();
+            blue.text = b.ToString();
+
             Color color = ColorRangeConverter.ColorFromRGB255_Color(r, g, b);
 
             image.color = color;
@@ -70,10 +75,10 @@ public class ColorChanger : MonoBehaviour
         catch (Exception e) { }
     }
 
-    void Generate()
-    {
-        ApiConnector.Instance.RequestColorScheme(requestingItem.Color, requestingItem.Index);
-    }
+    // void Generate()
+    // {
+    //     ApiConnector.Instance.RequestColorScheme(requestingItem.Color, requestingItem.Index);
+    // }
 
     void Close()
     {

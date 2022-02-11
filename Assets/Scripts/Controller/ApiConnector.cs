@@ -63,14 +63,12 @@ public class ApiConnector : MonoBehaviour
         }
 
         part += "],\"model\":\"default\"}";
-        Debug.Log(part);
         StartCoroutine(SendRequestColorScheme(part));
     }
 
     IEnumerator SendRequestColorScheme(string data = "{\"model\" : \"default\"}")
     {
         string request = API_ADDRESS;
-        Debug.Log(data);
         var dataBytes = Encoding.UTF8.GetBytes(data);
 
         using (UnityWebRequest colorSchemeInfoRequest = new UnityWebRequest(request, "GET"))
