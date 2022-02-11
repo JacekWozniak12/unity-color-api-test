@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// Unity messes up the RGB model enforcing the (0, 1) range in its 
 /// Color component, so I have to make this not really clean converter.
-/// TODO: check if there is not better solutions for that.
+/// TODO: check if there are better solution for that
 /// </summary>
 public static class ColorRangeConverter
 {

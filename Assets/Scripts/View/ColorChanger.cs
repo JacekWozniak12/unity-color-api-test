@@ -50,7 +50,7 @@ public class ColorChanger : MonoBehaviour
     void UpdateColor(string txt)
     {
         image.color = ColorRangeConverter.ColorFromRGB255_Color(red.text, green.text, blue.text);
-        requestingItem.Color = image.color;
+        requestingItem.SetColor(image.color, true);
     }
 
     void Generate()

@@ -7,7 +7,7 @@ public class ColorItem : MonoBehaviour
     public Color Color
     {
         get => _color;
-        set
+        private set
         {
             if (_color != value)
             {
@@ -22,6 +22,8 @@ public class ColorItem : MonoBehaviour
     Image image;
     Button button;
 
+    bool dirty;
+
     void Start()
     {
         image = GetComponent<Image>();
@@ -32,7 +34,7 @@ public class ColorItem : MonoBehaviour
     /// <summary>
     /// Takes color from given Color[] array using preset index in component
     /// </summary>
-    public void SetColor(Color[] colors)
+    public void SetColor(Color[] colors, bool setDirty = false)
     {
         Color = ColorRangeConverter.ColorFromRGB255_Color(
             colors[Index].r,
@@ -40,6 +42,26 @@ public class ColorItem : MonoBehaviour
             colors[Index].b
             );
         image.color = Color;
+        dirty = setDirty;
+    }
+
+    /// <summary>
+    /// Takes color
+    /// </summary>
+    public void SetColor(Color color, bool setDirty = false)
+    {
+        Color = ColorRangeConverter.ColorFromRGB255_Color(
+            color.r,
+            color.g,
+            color.b
+            );
+        image.color = Color;
+        dirty = setDirty;
+    }
+
+    public void SetDirty(bool setDirty)
+    {
+        dirty = setDirty;
     }
 
     /// <summary>
