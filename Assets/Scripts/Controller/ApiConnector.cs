@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using System.Collections;
 using UnityEngine;
@@ -20,25 +21,56 @@ public class ApiConnector : MonoBehaviour
     }
 
     /// <summary>
-    /// Starts routine that finishes with ColorReady event;
-    /// </summary>
-    public void GetColors()
-    {
-        StartCoroutine(RequestColorScheme());
-    }
-
-    /// <summary>
     /// Tries to connect with server specified in API_ADDRESS
     /// </summary>
     public UnityEvent<Color[]> ColorReady = new UnityEvent<Color[]>();
 
-    IEnumerator RequestColorScheme()
+    public void RequestColorScheme()
+    {
+        StartCoroutine(SendRequestColorScheme());
+    }
+
+    public void RequestColorScheme(Dictionary<int, Color> dictionary)
+    {
+        string part = "{\"input\":[";
+
+        for (int i = 0; i < 5; i++)
+        {
+            if (dictionary.TryGetValue(i, out Color color))
+            {
+                byte[] byteColor = ColorRangeConverter.ColorToRGB255_Byte(color.r, color.g, color.b);
+                part += $"[{byteColor[0]}, {byteColor[1]}, {byteColor[2]}]";
+            }
+            else part += "\"N\"";
+            if (i < 4) part += ",";
+        }
+
+        part += "],\"model\":\"default\"}";
+        Debug.Log(part);
+        StartCoroutine(SendRequestColorScheme(part));
+    }
+
+    public void RequestColorScheme(Color color, int index)
+    {
+        string part = "{\"input\":[";
+        byte[] byteColor = ColorRangeConverter.ColorToRGB255_Byte(color.r, color.g, color.b);
+
+        for (int i = 0; i < 5; i++)
+        {
+            if (i != index) part += "\"N\"";
+            else part += $"[{byteColor[0]}, {byteColor[1]}, {byteColor[2]}]";
+            if (i < 4) part += ",";
+        }
+
+        part += "],\"model\":\"default\"}";
+        Debug.Log(part);
+        StartCoroutine(SendRequestColorScheme(part));
+    }
+
+    IEnumerator SendRequestColorScheme(string data = "{\"model\" : \"default\"}")
     {
         string request = API_ADDRESS;
-        Debug.Log(request);
-
-        string data = "{\"model\" : \"default\"}";
-
+        Debug.Log(data);
         var dataBytes = Encoding.UTF8.GetBytes(data);
 
         using (UnityWebRequest colorSchemeInfoRequest = new UnityWebRequest(request, "GET"))
