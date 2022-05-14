@@ -1,40 +1,20 @@
+using System.Drawing;
 using System;
 using UnityEngine;
 
 /// <summary>
-/// Unity messes up the RGB model enforcing the (0, 1) range in its 
-/// Color component, so I have to make this not really clean converter.
-/// <para>TODO: check if there are better solution for that
+/// Unity enforces the (0, 1) range in its Color object, so for conversion from and to (0, 1)
+/// use this class
 /// </summary>
 public static class ColorRangeConverter
 {
-    public static Color ColorFromRGB255_Color(float r, float g, float b)
+    public static Color ColorFromRGB255_Color(float r, float g, float b, float a)
     {
         float red = r / 255;
         float green = g / 255;
         float blue = b / 255;
 
-        return new Color(red, green, blue, 1);
-    }
-
-    /// <summary>
-    /// Returns color from string, if string invalid, returns black
-    /// </summary>
-    public static Color ColorFromRGB255_Color(string r, string g, string b)
-    {
-        try
-        {
-            float red = float.Parse(r) / 255;
-            float green = float.Parse(g) / 255;
-            float blue = float.Parse(b) / 255;
-
-            return new Color(red, green, blue, 1);
-        }
-        catch (Exception e)
-        {
-            Debug.LogError(e + "\n Returning black");
-            return Color.black;
-        }
+        return new Color(red, green, blue, a);
     }
 
     public static byte[] ColorToRGB255_Byte(float r, float g, float b)
@@ -49,14 +29,14 @@ public static class ColorRangeConverter
     /// <summary>
     /// Returns string array with params of red, green and blue.
     /// </summary>
-    public static string[] ColorToRGB255_StringArray(Color color)
-        => ColorToRGB255_StringArray(color.r, color.g, color.b);
+    public static string[] ColorToRGB255_StringArray(Color color) =>
+        ColorToRGB255_StringArray(color.r, color.g, color.b);
 
     /// <summary>
     /// Returns specified string from array of red, green and blue.
     /// </summary>
-    public static string ColorToRGB255_StringArrayPart(Color color, int part)
-        => ColorToRGB255_StringArrayPart(color.r, color.g, color.b, part);
+    public static string ColorToRGB255_StringArrayPart(Color color, int part) =>
+        ColorToRGB255_StringArrayPart(color.r, color.g, color.b, part);
 
     public static string ColorToRGB255_String(Color color) =>
         ColorToRGB255_String(color.r, color.g, color.b);

@@ -44,7 +44,7 @@ public class ColorChanger : MonoBehaviour
         green.onEndEdit.AddListener(UpdateColor);
         blue.onEndEdit.AddListener(UpdateColor);
 
-        image.color = ColorRangeConverter.ColorFromRGB255_Color(red.text, green.text, blue.text);
+        image.color = colorItem.Color;
     }
 
     void CopyIntoClipboard() => GUIUtility.systemCopyBuffer = ColorRangeConverter.ColorToRGB255_String(requestingItem.Color);
@@ -60,12 +60,16 @@ public class ColorChanger : MonoBehaviour
             green.text = g.ToString();
             blue.text = b.ToString();
 
-            Color color = ColorRangeConverter.ColorFromRGB255_Color(r, g, b);
+            Color color = ColorRangeConverter.ColorFromRGB255_Color(
+                r, g, b, 1);
 
             image.color = color;
             requestingItem.SetColor(color);
         }
-        catch (Exception e) { }
+        catch (Exception e)
+        {
+            Popup.Instance.RequestErrorMessage(e.Message);
+        }
     }
 
     void Close()

@@ -44,7 +44,8 @@ public class ColorItem : MonoBehaviour
         Color = ColorRangeConverter.ColorFromRGB255_Color(
             colors[Index].r,
             colors[Index].g,
-            colors[Index].b
+            colors[Index].b,
+            1
             );
 
         image.color = Color;
@@ -59,5 +60,6 @@ public class ColorItem : MonoBehaviour
     /// <summary>
     /// Enables ColorItem to use the colorChanger
     /// </summary>
-    public void RequestColorChanger() => Popup.Instance.RequestColorChanger(this);
+    public void RequestColorChanger() => 
+        Popup.Instance.RequestColorChanger(this);
 }
