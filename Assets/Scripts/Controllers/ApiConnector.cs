@@ -52,33 +52,34 @@ public class ApiConnector : MonoBehaviour
     {
         string requestAddress = API_ADDRESS;
         var dataBytes = Encoding.UTF8.GetBytes(data);
-
         UnityWebRequest colorSchemeInfoRequest = SetColorSchemeRequest(requestAddress, dataBytes);
-        UnityWebRequest.Result result = await colorSchemeInfoRequest.SendWebRequest();
 
-        if (
-            result == UnityWebRequest.Result.ConnectionError
-            ||
-            result == UnityWebRequest.Result.ProtocolError)
+        UnityWebRequest.Result result = await colorSchemeInfoRequest.SendWebRequest();
+        Popup.Instance.RequestHideLoading();
+
+        if (CheckIfConnectionOrProtocolError(result))
         {
             Popup.Instance.RequestErrorMessage(colorSchemeInfoRequest.error);
-        }
-        else
-        {
-            try
-            {
-                CurrentColors = GetColorsFromRequest(colorSchemeInfoRequest);
-                ColorReady?.Invoke(CurrentColors.ToArray());
-            }
-            catch (JsonException e)
-            {
-                Popup.Instance.RequestErrorMessage(e.Message);
-            }
+            return;
         }
 
+        try
+        {
+            CurrentColors = GetColorsFromRequest(colorSchemeInfoRequest);
+            ColorReady?.Invoke(CurrentColors.ToArray());
+        }
+        catch (JsonException e)
+        {
+            Popup.Instance.RequestErrorMessage(e.Message);
+        }
     }
 
-    private List<Color> GetColorsFromRequest(UnityWebRequest colorSchemeInfoRequest)
+    bool CheckIfConnectionOrProtocolError(UnityWebRequest.Result result)
+    {
+        return result == UnityWebRequest.Result.ConnectionError || result == UnityWebRequest.Result.ProtocolError;
+    }
+
+    List<Color> GetColorsFromRequest(UnityWebRequest colorSchemeInfoRequest)
     {
         JObject t = JsonConvert.DeserializeObject<JObject>(colorSchemeInfoRequest.downloadHandler.text);
         List<int>[] colors = t.GetValue("result").ToObject<List<int>[]>();
@@ -86,7 +87,7 @@ public class ApiConnector : MonoBehaviour
         return temp;
     }
 
-    private List<Color> CreateListOfColorsFromIntArray(List<int>[] colors)
+    List<Color> CreateListOfColorsFromIntArray(List<int>[] colors)
     {
         List<Color> temp = new List<Color>();
 

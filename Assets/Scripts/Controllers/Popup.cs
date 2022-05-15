@@ -11,6 +11,9 @@ public class Popup : MonoBehaviour
     ErrorMessage errorMessage;
 
     [SerializeField]
+    Loading loading;
+
+    [SerializeField]
     GameObject view;
 
     void Awake() => Instance = this;
@@ -36,5 +39,28 @@ public class Popup : MonoBehaviour
     {
         if (hideRequestGiver) requestGiver.SetActive(false);
         view.SetActive(false);
+    }
+
+    /// <summary>
+    /// Displays loading (if not already) and changes the value slider
+    /// </summary>
+    public void RequestLoading(float progress)
+    {
+        if (!loading.gameObject.activeInHierarchy)
+        {
+            view.SetActive(true);
+            loading.gameObject.SetActive(true);
+        }
+        loading.UpdateSlider(progress);
+    }
+
+    /// <summary>
+    /// Hides popup and zero loading
+    /// </summary>
+    public void RequestHideLoading()
+    {
+        loading.UpdateSlider(0);
+        view.SetActive(false);
+        loading.gameObject.SetActive(false);
     }
 }
