@@ -40,11 +40,11 @@ public class ApiConnector : MonoBehaviour
 
     UnityWebRequest SetColorSchemeRequest(string request, byte[] dataBytes)
     {
-        UnityWebRequest colorSchemeInfoRequest = UnityWebRequest.Get(request);
+        UnityWebRequest colorSchemeInfoRequest = new UnityWebRequest(request, "POST");
         colorSchemeInfoRequest.uploadHandler = new UploadHandlerRaw(dataBytes);
         colorSchemeInfoRequest.downloadHandler = new DownloadHandlerBuffer();
-        colorSchemeInfoRequest.SetRequestHeader("accept", " text/plain");
-        colorSchemeInfoRequest.SetRequestHeader("application", "x-www-form-urlencoded");
+        colorSchemeInfoRequest.SetRequestHeader("accept", " data/binary");
+        colorSchemeInfoRequest.SetRequestHeader("content-type", "text/plain");
         return colorSchemeInfoRequest;
     }
 
