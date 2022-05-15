@@ -15,11 +15,7 @@ public class ColorItem : MonoBehaviour
     }
 
     private Color _color;
-
-    public bool Dirty
-    {
-        get; private set;
-    }
+    public bool Dirty { get; private set; }
 
     Image image;
     Button button;
@@ -60,6 +56,6 @@ public class ColorItem : MonoBehaviour
     /// <summary>
     /// Enables ColorItem to use the colorChanger
     /// </summary>
-    public void RequestColorChanger() => 
+    public void RequestColorChanger() =>
         Popup.Instance.RequestColorChanger(this);
 }
