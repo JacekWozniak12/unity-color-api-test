@@ -1,4 +1,3 @@
-using System;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -10,22 +9,15 @@ using System.Threading.Tasks;
 
 public class ApiConnector : MonoBehaviour
 {
-    const string API_ADDRESS = "http://colormind.io/api/";
-    public List<Color> CurrentColors = new List<Color>(5);
     public static ApiConnector Instance;
+    const string API_ADDRESS = "http://colormind.io/api/";
+
+    public List<Color> CurrentColors = new List<Color>(5);
+    public UnityEvent<Color[]> ColorReady = new UnityEvent<Color[]>();
 
     void Awake() => Instance = this;
 
-    /// <summary>
-    /// Tries to connect with server specified in API_ADDRESS
-    /// </summary>
-    public UnityEvent<Color[]> ColorReady = new UnityEvent<Color[]>();
-
-    public async void RequestColorScheme()
-    {
-        await SendRequestColorScheme();
-    }
-
+    public async void RequestColorScheme() => await SendRequestColorScheme();
     public async void RequestColorScheme(Dictionary<int, Color> dictionary)
     {
         string part = "{\"input\":[";
@@ -43,22 +35,6 @@ public class ApiConnector : MonoBehaviour
 
         part += "],\"model\":\"default\"}";
 
-        await SendRequestColorScheme(part);
-    }
-
-    public async void RequestColorScheme(Color color, int index)
-    {
-        string part = "{\"input\":[";
-        byte[] byteColor = ColorRangeConverter.ColorToRGB255_Byte(color.r, color.g, color.b);
-
-        for (int i = 0; i < 5; i++)
-        {
-            if (i != index) part += "\"N\"";
-            else part += $"[{byteColor[0]}, {byteColor[1]}, {byteColor[2]}]";
-            if (i < 4) part += ",";
-        }
-
-        part += "],\"model\":\"default\"}";
         await SendRequestColorScheme(part);
     }
 
@@ -91,11 +67,8 @@ public class ApiConnector : MonoBehaviour
         {
             try
             {
-                JObject t = JsonConvert.DeserializeObject<JObject>(colorSchemeInfoRequest.downloadHandler.text);
-                List<int>[] colors = t.GetValue("result").ToObject<List<int>[]>();
-                List<Color> temp = CreateListOfColorsFromIntArray(colors);
-                CurrentColors = temp;
-                ColorReady?.Invoke(temp.ToArray());
+                CurrentColors = GetColorsFromRequest(colorSchemeInfoRequest);
+                ColorReady?.Invoke(CurrentColors.ToArray());
             }
             catch (JsonException e)
             {
@@ -103,6 +76,14 @@ public class ApiConnector : MonoBehaviour
             }
         }
 
+    }
+
+    private List<Color> GetColorsFromRequest(UnityWebRequest colorSchemeInfoRequest)
+    {
+        JObject t = JsonConvert.DeserializeObject<JObject>(colorSchemeInfoRequest.downloadHandler.text);
+        List<int>[] colors = t.GetValue("result").ToObject<List<int>[]>();
+        List<Color> temp = CreateListOfColorsFromIntArray(colors);
+        return temp;
     }
 
     private List<Color> CreateListOfColorsFromIntArray(List<int>[] colors)

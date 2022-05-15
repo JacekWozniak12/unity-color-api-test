@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Popup : MonoBehaviour
 {
+    public static Popup Instance;
+
     [SerializeField]
     ColorChanger colorChanger;
 
@@ -11,12 +13,7 @@ public class Popup : MonoBehaviour
     [SerializeField]
     GameObject view;
 
-    public static Popup Instance;
-
-    void Awake()
-    {
-        Instance = this;
-    }
+    void Awake() => Instance = this;
 
     public void RequestColorChanger(ColorItem item)
     {
