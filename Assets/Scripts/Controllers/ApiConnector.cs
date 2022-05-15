@@ -40,11 +40,11 @@ public class ApiConnector : MonoBehaviour
 
     UnityWebRequest SetColorSchemeRequest(string request, byte[] dataBytes)
     {
-        UnityWebRequest colorSchemeInfoRequest = new UnityWebRequest(request, "GET");
+        UnityWebRequest colorSchemeInfoRequest = UnityWebRequest.Get(request);
         colorSchemeInfoRequest.uploadHandler = new UploadHandlerRaw(dataBytes);
         colorSchemeInfoRequest.downloadHandler = new DownloadHandlerBuffer();
-        colorSchemeInfoRequest.SetRequestHeader("Content-Type", "application/json");
-        colorSchemeInfoRequest.SetRequestHeader("Accept", " text/plain");
+        colorSchemeInfoRequest.SetRequestHeader("accept", " text/plain");
+        colorSchemeInfoRequest.SetRequestHeader("application", "x-www-form-urlencoded");
         return colorSchemeInfoRequest;
     }
 
@@ -70,7 +70,7 @@ public class ApiConnector : MonoBehaviour
         }
         catch (JsonException e)
         {
-            Popup.Instance.RequestErrorMessage(e.Message);
+            Popup.Instance.RequestErrorMessage(e.Message + "\n " + colorSchemeInfoRequest.downloadHandler.text);
         }
     }
 
